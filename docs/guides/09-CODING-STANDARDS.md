@@ -139,34 +139,51 @@ ProductCard.propTypes = {
 };
 ```
 
-### Backend Service Structure
+### Backend Service Structure (Strapi)
 
-```typescript
-// products.service.ts
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service';
+```javascript
+// src/api/product/services/product.js
+'use strict';
+
+const { createCoreService } = require('@strapi/strapi').factories;
 
 // Services should have:
-// 1. Dependency injection (constructor)
-// 2. Private helper methods
-// 3. Public business methods
-// 4. Error handling
+// 1. Async query methods
+// 2. Error handling
+// 3. Strapi content type interactions
+// 4. Business logic separation
 
-@Injectable()
-export class ProductsService {
-  constructor(private prisma: PrismaService) {}
-
+module.exports = createCoreService('api::product.product', {
+  
   // Public methods
-  async getAll(page: number, limit: number) {
+  async getAll(page = 1, limit = 20) {
     const skip = (page - 1) * limit;
-    return this.prisma.product.findMany({ skip, take: limit });
-  }
+    
+    const [data, total] = await Promise.all([
+      strapi.entityService.findMany('api::product.product', {
+        offset: skip,
+        limit,
+        populate: ['category']
+      }),
+      strapi.db.query('api::product.product').count()
+    ]);
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    };
+  },
 
   // Private helpers
-  private calculateDiscount() {
+  calculateDiscount() {
     // ...
   }
-}
+});
 ```
 
 ---
@@ -178,15 +195,18 @@ export class ProductsService {
 - **Maximum 100 characters**
 - Break long lines logically
 
-```typescript
-// ✅ Good
-const users = await prisma.user.findMany({
-  where: { role: 'ADMIN' },
-  include: { reviews: true }
-});
+```javascript
+// ✅ Good (Strapi)
+const users = await strapi.entityService.findMany(
+  'plugin::users-permissions.user',
+  {
+    filters: { role: { name: 'Authenticated' } },
+    populate: ['reviews']
+  }
+);
 
 // ❌ Bad (too long)
-const users = await prisma.user.findMany({ where: { role: 'ADMIN' }, include: { reviews: true } });
+const users = await strapi.entityService.findMany('plugin::users-permissions.user', { filters: { role: { name: 'Authenticated' } }, populate: ['reviews'] });
 ```
 
 ### Function Length
@@ -443,17 +463,23 @@ function Component() {
 
 ### Input Validation
 
-```typescript
-// ✅ Good
-const createUser = async (data: unknown) => {
+```javascript
+// ✅ Good (Strapi)
+const createUser = async (data) => {
   // Validate before using
   const validated = userSchema.parse(data);
-  return prisma.user.create({ data: validated });
+  return strapi.entityService.create(
+    'plugin::users-permissions.user',
+    { data: validated }
+  );
 };
 
 // ❌ Bad
 const createUser = async (data) => {
-  return prisma.user.create({ data });
+  return strapi.entityService.create(
+    'plugin::users-permissions.user',
+    { data }
+  );
 };
 ```
 

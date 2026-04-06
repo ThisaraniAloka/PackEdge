@@ -7,7 +7,7 @@ Understanding the PackEdge codebase organization.
 ```
 PackEdge/
 ├── frontend/              # React + Vite application
-├── backend/               # NestJS API server
+├── backend/               # Strapi CMS backend
 ├── docs/                  # Documentation (you are here)
 ├── .gitignore             # Git ignore rules
 ├── README.md              # Project overview
@@ -168,98 +168,47 @@ frontend/
 
 ---
 
-## 🔧 Backend Structure
+## 🔧 Backend Structure (Strapi CMS)
 
 ```
 backend/
-├── src/
-│   ├── modules/                      # Feature modules
-│   │   ├── auth/                     # Authentication
-│   │   │   ├── auth.controller.ts    # Auth endpoints
-│   │   │   ├── auth.service.ts       # Auth logic
-│   │   │   ├── auth.guard.ts         # JWT guard
-│   │   │   ├── auth.module.ts        # Auth module
-│   │   │   └── dto/
-│   │   │       ├── login.dto.ts      # Login input
-│   │   │       └── register.dto.ts   # Register input
-│   │   │
-│   │   ├── users/                    # User management
-│   │   │   ├── users.controller.ts
-│   │   │   ├── users.service.ts
-│   │   │   ├── users.module.ts
-│   │   │   ├── dto/
-│   │   │   │   ├── create-user.dto.ts
-│   │   │   │   └── update-user.dto.ts
-│   │   │   └── entities/
-│   │   │       └── user.entity.ts
-│   │   │
-│   │   ├── products/                 # Product management
-│   │   │   ├── products.controller.ts
-│   │   │   ├── products.service.ts
-│   │   │   ├── products.module.ts
-│   │   │   ├── dto/
-│   │   │   │   └── create-product.dto.ts
-│   │   │   └── entities/
-│   │   │       └── product.entity.ts
-│   │   │
-│   │   ├── categories/               # Category management
-│   │   │   ├── categories.controller.ts
-│   │   │   ├── categories.service.ts
-│   │   │   ├── categories.module.ts
-│   │   │   ├── dto/
-│   │   │   │   └── create-category.dto.ts
-│   │   │   └── entities/
-│   │   │       └── category.entity.ts
-│   │   │
-│   │   ├── reviews/                  # Review management
-│   │   │   ├── reviews.controller.ts
-│   │   │   ├── reviews.service.ts
-│   │   │   ├── reviews.module.ts
-│   │   │   └── entities/
-│   │   │       └── review.entity.ts
-│   │   │
-│   │   ├── promotions/               # Promotion management
-│   │   │   ├── promotions.controller.ts
-│   │   │   ├── promotions.service.ts
-│   │   │   └── promotions.module.ts
-│   │   │
-│   │   ├── upload/                   # File uploads
-│   │   │   ├── upload.controller.ts
-│   │   │   ├── upload.service.ts
-│   │   │   └── upload.module.ts
-│   │   │
-│   │   └── analytics/                # Analytics & reports
-│   │       ├── analytics.controller.ts
-│   │       ├── analytics.service.ts
-│   │       └── analytics.module.ts
-│   │
-│   ├── common/                       # Shared utilities
-│   │   ├── guards/
-│   │   │   └── roles.guard.ts        # Role-based access
-│   │   ├── decorators/
-│   │   │   └── roles.decorator.ts    # Role decorator
-│   │   ├── enums/
-│   │   │   └── role.enum.ts          # User roles
-│   │   └── filters/
-│   │       └── http-exception.filter.ts # Error handling
-│   │
-│   ├── config/                       # Configuration
-│   │   ├── database.config.ts        # Database config
-│   │   └── jwt.config.ts             # JWT config
-│   │
-│   ├── app.module.ts                 # Root module
-│   └── main.ts                       # Entry point
+├── config/                           # Strapi configuration
+│   ├── database.js                   # PostgreSQL configuration
+│   ├── server.js                     # Server settings (port 1337)
+│   ├── plugins.js                    # Plugin configuration (JWT, Users)
+│   ├── middlewares.js                # Custom middleware
+│   ├── functions/                    # Reusable functions
+│   └── cron.js                       # Scheduled tasks (optional)
 │
-├── prisma/                           # Database
-│   ├── schema.prisma                 # Data models
-│   ├── migrations/                   # Database versions
-│   └── seed.ts                       # Initial data
+├── src/
+│   ├── api/                          # Content Types (auto-generated)
+│   │   ├── product/                  # Product content type
+│   │   │   ├── controllers/
+│   │   │   │   └── product.js        # Auto-generated endpoints
+│   │   │   ├── services/
+│   │   │   │   └── product.js        # Business logic
+│   │   │   ├── routes/
+│   │   │   ├── content-types/        # Content type definition
+│   │   │   └── lifecycles.js         # Hooks (before/after events)
+│   │   │
+│   │   ├── category/                 # Category content type
+│   │   ├── review/                   # Review content type
+│   │   └── promotion/                # Promotion content type
+│   │
+│   ├── extensions/                   # Custom code (optional)
+│   │   ├── upload/                   # Upload plugin customization
+│   │   └── users-permissions/        # Auth customization
+│   │
+│   ├── filters/                      # Custom filters (middleware)
+│   ├── policies/                     # Access policies
+│   ├── middlewares/                  # Global middleware
+│   └── index.js                      # Strapi entry point
 │
 ├── .env                              # Environment variables
+├── .env.example                      # Example environment
 ├── .gitignore                        # Git ignore
-├── package.json                      # Dependencies
-├── tsconfig.json                     # TypeScript config
-└── README.md                         # Backend readme
+├── package.json                      # Dependencies (Strapi, plugins)
+└── README.md                         # Backend setup guide
 ```
 
 ---
@@ -271,13 +220,13 @@ User Browser
     ↓
 [Frontend (React)]
     ↓ (HTTP/REST)
-[API Routes] → [Controllers]
+[API Routes] → [Strapi Controllers]
     ↓
 [Services] (Business Logic)
     ↓
-[Prisma ORM]
-    ↓
 [PostgreSQL Database]
+    ↓ (Query Results)
+[JSON Response] → [Frontend State (Zustand)]
 ```
 
 ---
@@ -310,12 +259,12 @@ User Browser
 - Services use API client
 - Store (Zustand) provides global state
 
-### Backend
-- Routes map to Controllers
-- Controllers use Services
-- Services use Prisma
-- Prisma queries Database
-- Guards/Decorators handle auth
+### Backend (Strapi)
+- Content Types define API endpoints (auto-generated)
+- Controllers handle HTTP requests
+- Services contain business logic
+- Policies/Guards handle authentication & authorization
+- Database stores persisted data
 
 ---
 

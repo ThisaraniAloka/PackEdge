@@ -1,6 +1,6 @@
-# Backend Guide
+# Backend Guide - Strapi CMS
 
-Comprehensive guide to NestJS backend development and best practices.
+Comprehensive guide to Strapi CMS backend development and best practices.
 
 ## 📁 Project Structure
 

@@ -41,13 +41,17 @@ Header.Payload.Signature
 
 ### Token Configuration
 
-```typescript
-// src/config/jwt.config.ts
-{
-  secret: process.env.JWT_SECRET,
-  expiresIn: '24h',
-  algorithm: 'HS256'
-}
+```javascript
+// config/plugins.js (Strapi)
+module.exports = ({env}) => ({
+  'users-permissions': {
+    config: {
+      jwt: {
+        expiresIn: '7d'
+      }
+    }
+  }
+});
 ```
 
 ### Token Validation
@@ -240,14 +244,33 @@ enum Role {
 
 #### Protecting Routes
 
-**Backend (NestJS):**
-```typescript
-@Post()
-@UseGuards(JwtGuard, RolesGuard)
-@Roles('ADMIN')
-async create(@Body() createProductDto: CreateProductDto) {
-  // Only ADMIN can access
-}
+**Backend (Strapi):**
+```javascript
+// src/api/product/controllers/product.js
+module.exports = createCoreController(
+  'api::product.product',
+  ({ strapi }) => ({
+    async create(ctx) {
+      // Check authentication
+      if (!ctx.state.user) {
+        return ctx.unauthorized('Must be logged in');
+      }
+      
+      // Check role
+      if (ctx.state.user.role.name !== 'Admin') {
+        return ctx.forbidden('Only admins can create');
+      }
+      
+      // Protected action
+      const product = await strapi.entityService.create(
+        'api::product.product',
+        { data: ctx.request.body }
+      );
+      
+      ctx.send({ data: product });
+    }
+  })
+);
 ```
 
 **Frontend (React):**
@@ -255,7 +278,7 @@ async create(@Body() createProductDto: CreateProductDto) {
 export function AdminRoute({ element }) {
   const { user } = useAuth();
   
-  return user?.role === 'ADMIN' ? element : <Navigate to="/" />;
+  return user?.role === 'Admin' ? element : <Navigate to="/" />;
 }
 ```
 
@@ -284,16 +307,35 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ### Protected Endpoint Example
 
-```typescript
-// Backend endpoint
-@Get('products')
-@UseGuards(JwtGuard)  // Requires valid token
-async getProducts() {
-  // User is authenticated
-}
-
-@Post('reviews')
-@UseGuards(JwtGuard)  // Requires valid token
+```javascript
+// Strapi - src/api/product/routes/product.js
+module.exports = {
+  routes: [
+    {
+      method: 'GET',
+      path: '/products',
+      handler: 'product.find',
+      config: { policies: [] }  // Public
+    },
+    {
+      method: 'POST',
+      path: '/products',
+      handler: 'product.create',
+      config: { 
+        policies: ['api::product.is-admin']  // Admin only
+      }
+    },
+    {
+      method: 'POST',
+      path: '/products/:id/review',
+      handler: 'product.addReview',
+      config: { 
+        policies: ['api::product.is-authenticated']  // Auth required
+      }
+    }
+  ]
+};
+```
 async createReview(@Req() req) {
   const userId = req.user.id;  // Token provides user info
 }

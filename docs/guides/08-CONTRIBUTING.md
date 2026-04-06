@@ -77,7 +77,7 @@ Same as branch types (feat, fix, docs, etc.)
 
 Where the change was made:
 - `frontend` - React/Vite code
-- `backend` - NestJS code
+- `backend` - Strapi CMS (Node.js/Koa)
 - `database` - Prisma schema
 - `config` - Configuration files
 - `docs` - Documentation

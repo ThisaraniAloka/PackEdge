@@ -10,10 +10,10 @@ PackEdge is a **monorepo** with separate frontend and backend services.
 ┌─────────────────────────────────────────────────────────┐
 │                     PackEdge System                       │
 ├──────────────────────┬──────────────────────────────────┤
-│   Frontend (React)   │      Backend (NestJS)             │
-│  - Vite dev server   │    - Express server               │
-│  - Port 5173         │    - Port 4000                    │
-│  - SPA               │    - REST API                     │
+│   Frontend (React)   │      Backend (Strapi CMS)         │
+│  - Vite dev server   │    - Koa server                  │
+│  - Port 5173         │    - Port 1337                   │
+│  - SPA               │    - REST API                    │
 └──────────────────────┴──────────────────────────────────┘
               │                          │
               └──────────────┬───────────┘
@@ -37,12 +37,12 @@ PackEdge is a **monorepo** with separate frontend and backend services.
      │
      ▼
 ┌─────────────────────┐
-│  Backend (NestJS)   │
+│  Backend (Strapi)   │
 │ ┌───────────────┐   │
 │ │ Auth Service  │   │ - Hash password (bcrypt)
 │ │               │   │ - Check email uniqueness
-│ │ Prisma        │   │ - Create user record
-│ │               │   │ - Generate JWT token
+│ │ Entity        │   │ - Create user record
+│ │ Service       │   │ - Generate JWT token
 │ └───────┬───────┘   │
 │         │           │
 │         ▼           │
@@ -69,12 +69,12 @@ PackEdge is a **monorepo** with separate frontend and backend services.
      │
      ▼
 ┌─────────────────────┐
-│  Backend (NestJS)   │
+│  Backend (Strapi)   │
 │ ┌────────────────┐  │
 │ │Product Service │  │ - Query database
 │ │                │  │ - Apply pagination
-│ │ Prisma         │  │ - Include relations
-│ │                │  │
+│ │ Entity         │  │ - Include relations
+│ │ Service        │  │
 │ └────────┬───────┘  │
 │          │          │
 │          ▼          │
