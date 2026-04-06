@@ -12,6 +12,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     // Simulate API call
+    
     setTimeout(() => {
       console.log({ email, password });
       setIsLoading(false);
