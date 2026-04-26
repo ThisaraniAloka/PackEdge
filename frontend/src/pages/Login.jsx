@@ -5,6 +5,7 @@ import qualityIcon from "../assets/auth/quality.svg";
 import ecoIcon from "../assets/auth/eco.svg";
 import globalIcon from "../assets/auth/global.svg";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,11 +17,12 @@ export default function Login() {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("Please fill all fields");
+      toast.error("Please fill all fields");
       return;
     }
 
     console.log("User logged in:", { email, password });
+    toast.success("Login successful");
 
     navigate("/");
   };

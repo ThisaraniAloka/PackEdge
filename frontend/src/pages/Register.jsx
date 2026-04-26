@@ -16,6 +16,7 @@ import qualityIcon from "../assets/auth/quality.svg";
 import ecoIcon from "../assets/auth/eco.svg";
 import globalIcon from "../assets/auth/global.svg";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -31,21 +32,22 @@ export default function Register() {
   e.preventDefault();
 
   if (!name || !email || !password || !confirmPassword) {
-    alert("Please fill all fields");
+    toast.error("Please fill all fields");
     return;
   }
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match!");
+    toast.error("Passwords do not match!");
     return;
   }
 
   if (!agreeTerms) {
-    alert("Please agree to Terms & Conditions");
+    toast.error("Please agree to Terms & Conditions");
     return;
   }
 
   // simulate successful registration
+  toast.success("Account created successfully!");
   console.log("User registered:", {
     name,
     email,
