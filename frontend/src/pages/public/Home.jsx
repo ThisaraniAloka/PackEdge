@@ -7,7 +7,7 @@ import CustomerPraise from '../../components/public/CustomerPraise';
 
 export default function Home() {
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 p-7 md:p-8 font-[DM Sans]">
       <HeroSection />
       <StatsBar />
       <CategoryGrid />
