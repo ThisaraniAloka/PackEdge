@@ -4,9 +4,28 @@ import loginImage from "../assets/auth/login.svg";
 import qualityIcon from "../assets/auth/quality.svg";
 import ecoIcon from "../assets/auth/eco.svg";
 import globalIcon from "../assets/auth/global.svg";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    console.log("User logged in:", { email, password });
+    toast.success("Login successful");
+
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -33,7 +52,7 @@ export default function Login() {
           <div>
             <h1 className="text-2xl font-bold mb-10">PackEdge</h1>
 
-            <h2 className="font-manrope font-extrabold text-[40px] leading-[60px] tracking-tight mb-6">
+            <h2 className="font-playfair font-extrabold text-[40px] leading-[60px] tracking-tight mb-6">
               Redefining the standard of presentation.
             </h2>
 
@@ -76,20 +95,20 @@ export default function Login() {
               className="rounded-xl text-center relative"
               style={{
                 height: "90px",
-                backgroundColor: "rgba(94,53,177,0.15)", // 5E35B1 at 15% opacity
+                backgroundColor: "rgba(94,53,177,0.15)", 
                 border: "1px solid rgba(255,255,255,0.1)",
-                backdropFilter: "blur(10px)", // optional if you want blur effect
+                backdropFilter: "blur(10px)", 
                 padding: "16px",
               }}
             >
               <h3
-                className="font-manrope font-bold text-[24px]"
+                className="font-playfair font-bold text-[24px]"
                 style={{ color: "#FFFFFF" }}
               >
                 12k+
               </h3>
               <p
-                className="font-inter font-semibold text-[12px]"
+                className="font-semibold text-[12px]"
                 style={{ color: "#CEB8FF" }}
               >
                 Happy Customers
@@ -109,13 +128,13 @@ export default function Login() {
               }}
             >
               <h3
-                className="font-manrope font-bold text-[24px]"
+                className="font-playfair font-bold text-[24px]"
                 style={{ color: "#FFFFFF" }}
               >
                 24/7
               </h3>
               <p
-                className="font-inter font-semibold text-[12px]"
+                className="font-semibold text-[12px]"
                 style={{ color: "#CEB8FF" }}
               >
                 Premium Support
@@ -134,13 +153,13 @@ export default function Login() {
               }}
             >
               <h3
-                className="font-manrope font-bold text-[24px]"
+                className="font-playfair font-bold text-[24px]"
                 style={{ color: "#FFFFFF" }}
               >
                 5k+
               </h3>
               <p
-                className="font-inter font-semibold text-[12px]"
+                className="font-semibold text-[12px]"
                 style={{ color: "#CEB8FF" }}
               >
                 Sustainable Products
@@ -152,7 +171,7 @@ export default function Login() {
 
       {/* RIGHT SIDE */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-100 p-6">
-        <div className="bg-white w-full max-w-md rounded-2xl shadow-lg p-8">
+        <form onSubmit={handleLogin} className="bg-white w-full max-w-md rounded-2xl shadow-lg p-8">
           <h2 className="text-2xl font-bold mb-2">Welcome Back</h2>
           <p className="text-gray-500 text-sm mb-6">
             Please enter your details to access your dashboard.
@@ -165,6 +184,8 @@ export default function Login() {
               <Mail size={16} className="text-gray-400 mr-2" />
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@packedge.com"
                 className="bg-transparent outline-none w-full text-sm"
               />
@@ -178,6 +199,8 @@ export default function Login() {
               <Lock size={16} className="text-gray-400 mr-2" />
               <input
                 type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="bg-transparent outline-none w-full text-sm"
               />
@@ -197,24 +220,32 @@ export default function Login() {
               <input type="checkbox" />
               Remember Me
             </label>
-            <a href="#" className="text-purple-600 font-medium">
-              Forgot Password?
-            </a>
+            <button
+              type="button"
+              onClick={() => navigate("/Register")}
+              className="text-purple-600 font-medium"
+            >
+              Register
+            </button>
           </div>
 
           {/* Button */}
-          <button className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition">
+          <button type="submit" className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition">
             Sign In
           </button>
 
           {/* Register */}
           <p className="text-center text-sm mt-6">
             Don't have an account?{" "}
-            <a href="#" className="text-purple-600 font-medium">
+            <button
+              type="button"
+              onClick={() => navigate("/Register")}
+              className="text-purple-600 font-medium"
+            >
               Register
-            </a>
+            </button>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );
