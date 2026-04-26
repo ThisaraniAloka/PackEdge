@@ -8,7 +8,22 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    console.log("User logged in:", { email, password });
+
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -154,7 +169,7 @@ export default function Login() {
 
       {/* RIGHT SIDE */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-100 p-6">
-        <div className="bg-white w-full max-w-md rounded-2xl shadow-lg p-8">
+        <form onSubmit={handleLogin} className="bg-white w-full max-w-md rounded-2xl shadow-lg p-8">
           <h2 className="text-2xl font-bold mb-2">Welcome Back</h2>
           <p className="text-gray-500 text-sm mb-6">
             Please enter your details to access your dashboard.
@@ -167,6 +182,8 @@ export default function Login() {
               <Mail size={16} className="text-gray-400 mr-2" />
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@packedge.com"
                 className="bg-transparent outline-none w-full text-sm"
               />
@@ -180,6 +197,8 @@ export default function Login() {
               <Lock size={16} className="text-gray-400 mr-2" />
               <input
                 type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="bg-transparent outline-none w-full text-sm"
               />
@@ -200,6 +219,7 @@ export default function Login() {
               Remember Me
             </label>
             <button
+              type="button"
               onClick={() => navigate("/Register")}
               className="text-purple-600 font-medium"
             >
@@ -208,7 +228,7 @@ export default function Login() {
           </div>
 
           {/* Button */}
-          <button className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition">
+          <button type="submit" className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition">
             Sign In
           </button>
 
@@ -216,13 +236,14 @@ export default function Login() {
           <p className="text-center text-sm mt-6">
             Don't have an account?{" "}
             <button
+              type="button"
               onClick={() => navigate("/Register")}
               className="text-purple-600 font-medium"
             >
               Register
             </button>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -1,6 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock, User, Package, Check, X } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  Package,
+  Check,
+  X,
+} from "lucide-react";
+
+import loginImage from "../assets/auth/login.svg";
+import qualityIcon from "../assets/auth/quality.svg";
+import ecoIcon from "../assets/auth/eco.svg";
+import globalIcon from "../assets/auth/global.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -9,8 +24,37 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = (e) => {
+  e.preventDefault();
+
+  if (!name || !email || !password || !confirmPassword) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  if (!agreeTerms) {
+    alert("Please agree to Terms & Conditions");
+    return;
+  }
+
+  // simulate successful registration
+  console.log("User registered:", {
+    name,
+    email,
+    password,
+  });
+
+  navigate("/");
+};
+
 
   const passwordRequirements = [
     { text: "At least 8 characters", validator: (pwd) => pwd.length >= 8 },
@@ -19,184 +63,231 @@ export default function Register() {
     { text: "Contains number", validator: (pwd) => /\d/.test(pwd) },
   ];
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords don't match!");
-      return;
-    }
-    if (!agreeTerms) {
-      alert("Please agree to the Terms & Conditions");
-      return;
-    }
-    
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log({ name, email, password });
-      setIsLoading(false);
-    }, 1500);
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
-      </div>
+    <div className="min-h-screen flex">
 
-      {/* Main Card */}
-      <div className="relative w-full max-w-md">
-        {/* Decorative Elements */}
-        <div className="absolute -top-5 -left-5 w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl rotate-12 opacity-80"></div>
-        <div className="absolute -bottom-5 -right-5 w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl -rotate-12 opacity-80"></div>
-        
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 max-h-[90vh] overflow-y-auto">
-          {/* Logo & Title */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mb-4 shadow-lg">
-              <Package className="w-8 h-8 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Join PackEdge
+      {/* ================= LEFT SIDE (SAME AS LOGIN) ================= */}
+      <div className="hidden md:flex w-1/2 relative overflow-hidden">
+
+        <img
+          src={loginImage}
+          alt="background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom right, rgba(70,21,153,0.8) 0%, rgba(70,21,153,0) 100%)",
+          }}
+        />
+
+        <div className="relative z-10 text-white p-12 flex flex-col justify-between w-full m-8">
+
+          <div>
+            <h1 className="text-2xl font-bold mb-10">PackEdge</h1>
+
+            <h2 className="font-playfair font-extrabold text-[40px] leading-[60px] mb-6">
+              Redefining the standard of presentation.
             </h2>
-            <p className="text-gray-600 mt-2">Create your account to get started</p>
+
+            <p className="text-[18px] text-justify" style={{ color: "#CEB8FF" }}>
+              PackEdge leads in bespoke digital product showcases, bridging
+              structural engineering and visual storytelling.
+            </p>
+
+            <ul className="mt-8 space-y-3 text-[16px]">
+              <li className="flex items-center gap-2">
+                <img src={qualityIcon} className="w-4 h-4" />
+                Uncompromising Quality
+              </li>
+              <li className="flex items-center gap-2">
+                <img src={ecoIcon} className="w-4 h-4" />
+                Eco-Conscious Materials
+              </li>
+              <li className="flex items-center gap-2">
+                <img src={globalIcon} className="w-4 h-4" />
+                Global Logistics Network
+              </li>
+            </ul>
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-5">
-            {/* Name Field */}
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          {/* STATS */}
+          <div className="flex gap-6 pt-12">
+
+            <div
+              className="rounded-xl text-center"
+              style={{
+                height: "90px",
+                backgroundColor: "rgba(94,53,177,0.15)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                backdropFilter: "blur(10px)",
+                padding: "16px",
+              }}
+            >
+              <h3 className="font-bold text-[24px]">12k+</h3>
+              <p className="text-[12px]" style={{ color: "#CEB8FF" }}>
+                Happy Customers
+              </p>
+            </div>
+
+            <div
+              className="rounded-xl text-center"
+              style={{
+                height: "82px",
+                backgroundColor: "rgba(94,53,177,0.15)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                backdropFilter: "blur(10px)",
+                padding: "16px",
+                marginTop: "8px",
+              }}
+            >
+              <h3 className="font-bold text-[24px]">24/7</h3>
+              <p className="text-[12px]" style={{ color: "#CEB8FF" }}>
+                Premium Support
+              </p>
+            </div>
+
+            <div
+              className="rounded-xl text-center"
+              style={{
+                height: "90px",
+                backgroundColor: "rgba(94,53,177,0.15)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                backdropFilter: "blur(10px)",
+                padding: "16px",
+              }}
+            >
+              <h3 className="font-bold text-[24px]">5k+</h3>
+              <p className="text-[12px]" style={{ color: "#CEB8FF" }}>
+                Sustainable Products
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ================= RIGHT SIDE (REGISTER FORM) ================= */}
+      <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-100 p-6">
+
+       <form
+          onSubmit={handleRegister}
+          className="bg-white w-full max-w-md rounded-2xl shadow-lg p-8"
+        >
+
+
+          <div className="flex items-center gap-2 mb-6">
+            <Package className="text-purple-700" />
+            <h2 className="text-2xl font-bold">Create Account</h2>
+          </div>
+
+          <p className="text-gray-500 text-sm mb-6">
+            Join PackEdge and start your journey.
+          </p>
+
+          {/* NAME */}
+          <div className="mb-4">
+            <label className="text-xs text-gray-500">FULL NAME</label>
+            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 mt-1">
+              <User size={16} className="text-gray-400 mr-2" />
               <input
                 type="text"
-                placeholder="Full name"
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                placeholder="Your name"
+                className="bg-transparent outline-none w-full text-sm"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required
               />
             </div>
+          </div>
 
-            {/* Email Field */}
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          {/* EMAIL */}
+          <div className="mb-4">
+            <label className="text-xs text-gray-500">EMAIL</label>
+            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 mt-1">
+              <Mail size={16} className="text-gray-400 mr-2" />
               <input
                 type="email"
-                placeholder="Email address"
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                placeholder="admin@packedge.com"
+                className="bg-transparent outline-none w-full text-sm"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
+          </div>
 
-            {/* Password Field */}
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          {/* PASSWORD */}
+          <div className="mb-4">
+            <label className="text-xs text-gray-500">PASSWORD</label>
+            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 mt-1">
+              <Lock size={16} className="text-gray-400 mr-2" />
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                placeholder="••••••••"
+                className="bg-transparent outline-none w-full text-sm"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              <button type="button" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <EyeOff size={16} className="text-gray-400" />
+                ) : (
+                  <Eye size={16} className="text-gray-400" />
+                )}
               </button>
             </div>
+          </div>
 
-            {/* Confirm Password Field */}
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          {/* CONFIRM PASSWORD */}
+          <div className="mb-4">
+            <label className="text-xs text-gray-500">CONFIRM PASSWORD</label>
+            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 mt-1">
+              <Lock size={16} className="text-gray-400 mr-2" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm password"
-                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                placeholder="••••••••"
+                className="bg-transparent outline-none w-full text-sm"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                required
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              <button onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                {showConfirmPassword ? (
+                  <EyeOff size={16} className="text-gray-400" />
+                ) : (
+                  <Eye size={16} className="text-gray-400" />
+                )}
               </button>
             </div>
+          </div>
 
-            {/* Password Requirements */}
-            {password && (
-              <div className="bg-gray-50 rounded-xl p-3 space-y-2">
-                <p className="text-xs font-semibold text-gray-700 mb-2">Password requirements:</p>
-                {passwordRequirements.map((req, index) => (
-                  <div key={index} className="flex items-center space-x-2 text-xs">
-                    {req.validator(password) ? (
-                      <Check className="w-3 h-3 text-green-500" />
-                    ) : (
-                      <X className="w-3 h-3 text-red-500" />
-                    )}
-                    <span className={req.validator(password) ? "text-green-600" : "text-gray-500"}>
-                      {req.text}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* TERMS */}
+          <label className="flex items-center gap-2 text-sm mb-4">
+            <input
+              type="checkbox"
+              checked={agreeTerms}
+              onChange={(e) => setAgreeTerms(e.target.checked)}
+            />
+            I agree to the Terms & Conditions
+          </label>
 
-            {/* Terms & Conditions */}
-            <label className="flex items-start space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={agreeTerms}
-                onChange={(e) => setAgreeTerms(e.target.checked)}
-                className="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                required
-              />
-              <span className="text-sm text-gray-600">
-                I agree to the{" "}
-                <Link to="/terms" className="text-blue-600 hover:text-blue-700 font-medium">
-                  Terms & Conditions
-                </Link>{" "}
-                and{" "}
-                <Link to="/privacy" className="text-blue-600 hover:text-blue-700 font-medium">
-                  Privacy Policy
-                </Link>
-              </span>
-            </label>
+          {/* BUTTON */}
+          <button
+            type="submit"
+            className="w-full bg-purple-700 hover:bg-purple-800 text-white py-3 rounded-full font-semibold transition"
+          >
+            Create Account
+          </button>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading || password !== confirmPassword || !agreeTerms}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
-                  <span>Creating account...</span>
-                </div>
-              ) : (
-                "Create Account"
-              )}
-            </button>
-          </form>
-
-          {/* Login Link */}
-          <p className="text-center mt-6 text-gray-600">
+          {/* LOGIN LINK */}
+          <p className="text-center text-sm mt-6">
             Already have an account?{" "}
-            <Link className="text-blue-600 hover:text-blue-700 font-semibold" to="/login">
+            <Link to="/login" className="text-purple-600 font-medium">
               Sign in
             </Link>
           </p>
-        </div>
+
+        </form>
       </div>
     </div>
   );
