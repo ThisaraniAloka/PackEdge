@@ -4,9 +4,11 @@ import loginImage from "../assets/auth/login.svg";
 import qualityIcon from "../assets/auth/quality.svg";
 import ecoIcon from "../assets/auth/eco.svg";
 import globalIcon from "../assets/auth/global.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex">
@@ -33,7 +35,7 @@ export default function Login() {
           <div>
             <h1 className="text-2xl font-bold mb-10">PackEdge</h1>
 
-            <h2 className="font-manrope font-extrabold text-[40px] leading-[60px] tracking-tight mb-6">
+            <h2 className="font-playfair font-extrabold text-[40px] leading-[60px] tracking-tight mb-6">
               Redefining the standard of presentation.
             </h2>
 
@@ -76,20 +78,20 @@ export default function Login() {
               className="rounded-xl text-center relative"
               style={{
                 height: "90px",
-                backgroundColor: "rgba(94,53,177,0.15)", // 5E35B1 at 15% opacity
+                backgroundColor: "rgba(94,53,177,0.15)", 
                 border: "1px solid rgba(255,255,255,0.1)",
-                backdropFilter: "blur(10px)", // optional if you want blur effect
+                backdropFilter: "blur(10px)", 
                 padding: "16px",
               }}
             >
               <h3
-                className="font-manrope font-bold text-[24px]"
+                className="font-playfair font-bold text-[24px]"
                 style={{ color: "#FFFFFF" }}
               >
                 12k+
               </h3>
               <p
-                className="font-inter font-semibold text-[12px]"
+                className="font-semibold text-[12px]"
                 style={{ color: "#CEB8FF" }}
               >
                 Happy Customers
@@ -109,13 +111,13 @@ export default function Login() {
               }}
             >
               <h3
-                className="font-manrope font-bold text-[24px]"
+                className="font-playfair font-bold text-[24px]"
                 style={{ color: "#FFFFFF" }}
               >
                 24/7
               </h3>
               <p
-                className="font-inter font-semibold text-[12px]"
+                className="font-semibold text-[12px]"
                 style={{ color: "#CEB8FF" }}
               >
                 Premium Support
@@ -134,13 +136,13 @@ export default function Login() {
               }}
             >
               <h3
-                className="font-manrope font-bold text-[24px]"
+                className="font-playfair font-bold text-[24px]"
                 style={{ color: "#FFFFFF" }}
               >
                 5k+
               </h3>
               <p
-                className="font-inter font-semibold text-[12px]"
+                className="font-semibold text-[12px]"
                 style={{ color: "#CEB8FF" }}
               >
                 Sustainable Products
@@ -197,9 +199,12 @@ export default function Login() {
               <input type="checkbox" />
               Remember Me
             </label>
-            <a href="#" className="text-purple-600 font-medium">
-              Forgot Password?
-            </a>
+            <button
+              onClick={() => navigate("/Register")}
+              className="text-purple-600 font-medium"
+            >
+              Register
+            </button>
           </div>
 
           {/* Button */}
@@ -210,9 +215,12 @@ export default function Login() {
           {/* Register */}
           <p className="text-center text-sm mt-6">
             Don't have an account?{" "}
-            <a href="#" className="text-purple-600 font-medium">
+            <button
+              onClick={() => navigate("/Register")}
+              className="text-purple-600 font-medium"
+            >
               Register
-            </a>
+            </button>
           </p>
         </div>
       </div>
