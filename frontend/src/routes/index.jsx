@@ -11,6 +11,7 @@ import AdminLayout from '../components/layout/AdminLayout';
 import Home from '../pages/public/Home';
 import Categories from '../pages/public/Categories';
 import ProductDetail from '../pages/public/ProductDetail';
+import CategoryProducts from '../pages/public/CategoryProducts';
 import Reviews from '../pages/public/Reviews';
 import Contact from '../pages/public/Contact';
 import About from '../pages/public/About';
@@ -18,6 +19,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import NotFound from '../pages/NotFound';
 import Unauthorized from '../pages/Unauthorized';
+
 
 // User pages
 import UserDashboard from '../pages/user/UserDashboard';
@@ -43,6 +45,7 @@ export default function AppRoutes() {
       {/* Public pages with layout */}
       <Route element={<PublicLayout><Home /></PublicLayout>} path="/" />
       <Route element={<PublicLayout><Categories /></PublicLayout>} path="/categories" />
+      <Route element={<PublicLayout><CategoryProducts /></PublicLayout>} path="/category/:id" />
       <Route element={<PublicLayout><ProductDetail /></PublicLayout>} path="/products/:id" />
       <Route element={<PublicLayout><Reviews /></PublicLayout>} path="/reviews" />
       <Route element={<PublicLayout><Contact /></PublicLayout>} path="/contact" />
