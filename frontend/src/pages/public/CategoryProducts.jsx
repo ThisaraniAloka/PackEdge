@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Pagination from '../public/Pagination';
+import products from '../../data/products';
 
 export default function CategoryProducts() {
   const { id } = useParams();
@@ -25,23 +26,23 @@ export default function CategoryProducts() {
   const category = categories.find((c) => c.id === categoryId);
 
   // products
-  const products = [
-    { id: 1, name: 'Premium Corrugated Box', price: 1200, img: 'https://t4.ftcdn.net/jpg/04/27/28/25/360_F_427282565_lenAT6VWeKHES8zOuJBdbW1DFrtlIvnt.jpg', categoryId: 1 },
-    { id: 2, name: 'Heavy Duty Shipping Box', price: 1500, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ9Mx1ICs1craWhfxzz3HULjve875Snh5Ovw&s', categoryId: 1 },
-    { id: 3, name: 'Double Wall Storage Box', price: 1800, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn0AWsQIlfy0BkggKpgJIoK4tTO1efHUZY0A&s', categoryId: 1 },
-    { id: 1, name: 'Premium Corrugated ', price: 1200, img: 'https://t4.ftcdn.net/jpg/04/27/28/25/360_F_427282565_lenAT6VWeKHES8zOuJBdbW1DFrtlIvnt.jpg', categoryId: 1 },
-    { id: 2, name: 'Heavy Duty Shipping ', price: 1500, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ9Mx1ICs1craWhfxzz3HULjve875Snh5Ovw&s', categoryId: 1 },
-    { id: 3, name: 'Double Wall Storage ', price: 1800, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn0AWsQIlfy0BkggKpgJIoK4tTO1efHUZY0A&s', categoryId: 1 },
+  // const products = [
+  //   { id: 1, name: 'Premium Corrugated Box', price: 1200, img: 'https://t4.ftcdn.net/jpg/04/27/28/25/360_F_427282565_lenAT6VWeKHES8zOuJBdbW1DFrtlIvnt.jpg', categoryId: 1 },
+  //   { id: 2, name: 'Heavy Duty Shipping Box', price: 1500, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ9Mx1ICs1craWhfxzz3HULjve875Snh5Ovw&s', categoryId: 1 },
+  //   { id: 3, name: 'Double Wall Storage Box', price: 1800, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn0AWsQIlfy0BkggKpgJIoK4tTO1efHUZY0A&s', categoryId: 1 },
+  //   { id: 1, name: 'Premium Corrugated ', price: 1200, img: 'https://t4.ftcdn.net/jpg/04/27/28/25/360_F_427282565_lenAT6VWeKHES8zOuJBdbW1DFrtlIvnt.jpg', categoryId: 1 },
+  //   { id: 2, name: 'Heavy Duty Shipping ', price: 1500, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ9Mx1ICs1craWhfxzz3HULjve875Snh5Ovw&s', categoryId: 1 },
+  //   { id: 3, name: 'Double Wall Storage ', price: 1800, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn0AWsQIlfy0BkggKpgJIoK4tTO1efHUZY0A&s', categoryId: 1 },
 
 
-    { id: 4, name: 'Eco Kraft Wrap Roll', price: 800, img: 'https://m.media-amazon.com/images/I/61jWD3-09KL._AC_UF894,1000_QL80_.jpg', categoryId: 2 },
-    { id: 5, name: 'Recycled Paper Sheets', price: 950, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqlPZzOi_xGigXrM63pquGATumpsxp86NmkQ&s', categoryId: 2 },
-    { id: 6, name: 'Biodegradable Wrap Pack', price: 1100, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4S81JqAL6ZRqd9-m6cbgCLjQ_xGUI2Yo8Fw&s', categoryId: 2 },
+  //   { id: 4, name: 'Eco Kraft Wrap Roll', price: 800, img: 'https://m.media-amazon.com/images/I/61jWD3-09KL._AC_UF894,1000_QL80_.jpg', categoryId: 2 },
+  //   { id: 5, name: 'Recycled Paper Sheets', price: 950, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqlPZzOi_xGigXrM63pquGATumpsxp86NmkQ&s', categoryId: 2 },
+  //   { id: 6, name: 'Biodegradable Wrap Pack', price: 1100, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4S81JqAL6ZRqd9-m6cbgCLjQ_xGUI2Yo8Fw&s', categoryId: 2 },
 
-    { id: 7, name: 'Luxury Gift Box Set', price: 2000, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz6Fn76U2Btk4ER71Ti3xRHo51sSk7pa1LXA&s', categoryId: 3 },
-    { id: 8, name: 'Premium Ribbon Pack', price: 900, img: 'https://m.media-amazon.com/images/I/714vXujAF+L._AC_UF894,1000_QL80_.jpg', categoryId: 3 },
-    { id: 9, name: 'Decorative Gift Bag Set', price: 1300, img: 'https://image.made-in-china.com/202f0j00NEqojpsPZRik/Unique-Design-Foldable-Colorful-Art-Paper-Gift-Bag-Sets-with-Small-Transparent-Windows-and-Bow-Decoration.webp', categoryId: 3 },
-  ];
+  //   { id: 7, name: 'Luxury Gift Box Set', price: 2000, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz6Fn76U2Btk4ER71Ti3xRHo51sSk7pa1LXA&s', categoryId: 3 },
+  //   { id: 8, name: 'Premium Ribbon Pack', price: 900, img: 'https://m.media-amazon.com/images/I/714vXujAF+L._AC_UF894,1000_QL80_.jpg', categoryId: 3 },
+  //   { id: 9, name: 'Decorative Gift Bag Set', price: 1300, img: 'https://image.made-in-china.com/202f0j00NEqojpsPZRik/Unique-Design-Foldable-Colorful-Art-Paper-Gift-Bag-Sets-with-Small-Transparent-Windows-and-Bow-Decoration.webp', categoryId: 3 },
+  // ];
 
   useEffect(() => {
     setCurrentPage(1);
