@@ -8,7 +8,7 @@ export default function ProductDetail() {
   // FIND PRODUCT
   const product = products.find((p) => p.id === Number(id));
 
-  // MAIN IMAGE STATE
+  // MAIN IMAGE
   const [mainImage, setMainImage] = useState(
     product?.images?.[0] || product?.img
   );
@@ -19,11 +19,34 @@ export default function ProductDetail() {
     y: 50,
   });
 
+  // REVIEWS STATE
+  const [reviews, setReviews] = useState([
+    {
+      name: 'Nimal Perera',
+      rating: 5,
+      comment: 'Excellent packaging quality and very durable product.',
+    },
+    {
+      name: 'Kavindi Silva',
+      rating: 4,
+      comment: 'Good eco-friendly packaging with fast delivery.',
+    },
+    {
+      name: 'Sahan Fernando',
+      rating: 3,
+      comment: 'Nice packaging product for daily business usage.',
+    },
+  ]);
+
+  // REVIEW FORM
+  const [name, setName] = useState('');
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+
   // PRODUCT NOT FOUND
   if (!product) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-20 text-center">
-
         <h1 className="text-3xl font-bold text-red-500">
           Product Not Found
         </h1>
@@ -34,30 +57,50 @@ export default function ProductDetail() {
         >
           Back to Categories
         </Link>
-
       </div>
     );
   }
 
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
+  // CALCULATE AVERAGE RATING
+  const averageRating =
+    reviews.reduce((acc, item) => acc + item.rating, 0) /
+    reviews.length;
 
-      {/* MAIN SECTION */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+  // SUBMIT REVIEW
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!name || !comment) return;
+
+    const newReview = {
+      name,
+      rating: Number(rating),
+      comment,
+    };
+
+    setReviews([newReview, ...reviews]);
+
+    setName('');
+    setRating(5);
+    setComment('');
+  };
+
+  // STAR FUNCTION
+  const renderStars = (count) => {
+    return '★'.repeat(count) + '☆'.repeat(5 - count);
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-10">
+
+      {/* TOP SECTION */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
         {/* LEFT SIDE */}
         <div>
-
           {/* MAIN IMAGE */}
           <div
-            className="
-              bg-gray-100
-              rounded-2xl
-              overflow-hidden
-              shadow-md
-              relative
-              cursor-zoom-in
-            "
+            className="bg-gray-100 rounded-2xl overflow-hidden shadow-md relative cursor-zoom-in"
             onMouseMove={(e) => {
               const { left, top, width, height } =
                 e.currentTarget.getBoundingClientRect();
@@ -68,76 +111,63 @@ export default function ProductDetail() {
               setPosition({ x, y });
             }}
           >
-
             <img
               src={mainImage}
               alt={product.name}
-              className="
-                w-full
-                h-[450px]
-                object-cover
-                transition-transform
-                duration-300
-                hover:scale-150
-              "
+              className="w-full h-[500px] object-cover transition-transform duration-300 hover:scale-150"
               style={{
                 transformOrigin: `${position.x}% ${position.y}%`,
               }}
             />
-
           </div>
 
-          {/* THUMBNAIL IMAGES */}
-          <div className="grid grid-cols-4 gap-4 mt-4">
-
-            {product.images?.map((image, index) => (
+          {/* THUMBNAILS */}
+          <div className="grid grid-cols-4 gap-4 mt-5">
+            {(product.images || [
+              product.img,
+              product.img,
+              product.img,
+              product.img,
+            ]).map((image, index) => (
               <div
                 key={index}
                 onClick={() => setMainImage(image)}
-                className={`
-                  cursor-pointer
-                  border-2
-                  rounded-xl
-                  overflow-hidden
-                  transition
-                  ${
-                    mainImage === image
-                      ? 'border-[#639922]'
-                      : 'border-gray-200'
-                  }
-                `}
+                className={`border-2 rounded-xl overflow-hidden cursor-pointer transition ${
+                  mainImage === image
+                    ? 'border-[#639922]'
+                    : 'border-gray-200'
+                }`}
               >
-
                 <img
                   src={image}
                   alt={`Thumbnail ${index + 1}`}
-                  className="
-                    w-full
-                    h-24
-                    object-cover
-                    hover:opacity-80
-                  "
+                  className="w-full h-24 object-cover hover:opacity-80"
                 />
-
               </div>
             ))}
-
           </div>
-
         </div>
 
-        {/* RIGHT SIDE - DETAILS */}
+        {/* RIGHT SIDE */}
         <div>
-
           <p className="text-sm text-[#639922] font-semibold uppercase">
             Premium Packaging
           </p>
 
-          <h1 className="text-4xl font-bold text-gray-900 mt-2">
-            {product.name}
-          </h1>
+          <div className="flex items-center gap-4 mt-2 flex-wrap">
+            <h1 className="text-4xl font-bold text-gray-900">
+              {product.name}
+            </h1>
 
-          <p className="text-3xl font-bold text-[#639922] mt-4">
+            <div className="flex items-center gap-2 bg-yellow-100 px-3 py-1 rounded-full">
+              <span className="text-yellow-500 text-lg">★</span>
+              <span className="font-semibold text-gray-800">
+                {averageRating.toFixed(1)}
+              </span>
+            </div>
+          </div>
+
+          <p className="text-3xl font-bold text-[#639922] mt-5">
             LKR {product.price}
           </p>
 
@@ -147,107 +177,104 @@ export default function ProductDetail() {
 
           {/* PRODUCT DETAILS */}
           <div className="mt-8 space-y-4">
-
             <div className="flex justify-between border-b pb-3">
-              <span className="font-semibold text-gray-700">
-                Material
-              </span>
-
-              <span className="text-gray-600">
-                {product.material}
-              </span>
+              <span className="font-semibold text-gray-700">Material</span>
+              <span className="text-gray-600">{product.material}</span>
             </div>
 
             <div className="flex justify-between border-b pb-3">
-              <span className="font-semibold text-gray-700">
-                Size
-              </span>
-
-              <span className="text-gray-600">
-                {product.size}
-              </span>
+              <span className="font-semibold text-gray-700">Size</span>
+              <span className="text-gray-600">{product.size}</span>
             </div>
 
             <div className="flex justify-between border-b pb-3">
-              <span className="font-semibold text-gray-700">
-                Stock
-              </span>
-
-              <span className="text-gray-600">
-                {product.stock} Available
-              </span>
+              <span className="font-semibold text-gray-700">Stock</span>
+              <span className="text-gray-600">{product.stock} Available</span>
             </div>
-
           </div>
+        </div>
+      </div>
 
-          {/* FEATURES */}
-          <div className="mt-8 space-y-3">
+      {/* ✅ REVIEWS SECTION SIDE BY SIDE */}
+      <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 bg-[#639922] rounded-full"></span>
+        {/* CUSTOMER REVIEWS */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Customer Reviews
+          </h2>
 
-              <p className="text-gray-700">
-                High quality material
-              </p>
-            </div>
+          <div className="space-y-5">
+            {reviews.map((review, index) => (
+              <div
+                key={index}
+                className="border rounded-2xl p-5 bg-gray-50"
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-800">
+                    {review.name}
+                  </h3>
 
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 bg-[#639922] rounded-full"></span>
+                  <div className="text-yellow-500 text-lg">
+                    {renderStars(review.rating)}
+                  </div>
+                </div>
 
-              <p className="text-gray-700">
-                Eco-friendly packaging
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 bg-[#639922] rounded-full"></span>
-
-              <p className="text-gray-700">
-                Fast delivery available
-              </p>
-            </div>
-
+                <p className="text-gray-600 mt-3 leading-7">
+                  {review.comment}
+                </p>
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* BUTTONS */}
-          <div className="flex gap-4 mt-10">
+        {/* WRITE REVIEW */}
+        <div>
+          <div className="border rounded-2xl p-6 shadow-sm bg-white">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Write a Review
+            </h2>
 
-            <button
-              className="
-                bg-[#639922]
-                hover:bg-green-700
-                text-white
-                px-8
-                py-3
-                rounded-full
-                transition
-              "
-            >
-              Add to Cart
-            </button>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full border rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-[#639922]"
+              />
 
-            <button
-              className="
-                border
-                border-[#639922]
-                text-[#639922]
-                px-8
-                py-3
-                rounded-full
-                hover:bg-[#639922]
-                hover:text-white
-                transition
-              "
-            >
-              Buy Now
-            </button>
+              <select
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+                className="w-full border rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-[#639922]"
+              >
+                <option value="5">★★★★★ Excellent</option>
+                <option value="4">★★★★☆ Very Good</option>
+                <option value="3">★★★☆☆ Good</option>
+                <option value="2">★★☆☆☆ Average</option>
+                <option value="1">★☆☆☆☆ Poor</option>
+              </select>
 
+              <textarea
+                rows="5"
+                placeholder="Write your review..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#639922]"
+              />
+
+              <button
+                type="submit"
+                className="mt-5 bg-[#639922] hover:bg-green-700 text-white px-8 py-3 rounded-full transition"
+              >
+                Submit Review
+              </button>
+            </form>
           </div>
-
         </div>
 
       </div>
-
     </div>
   );
 }
